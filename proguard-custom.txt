@@ -46,6 +46,12 @@
     <fields>;
 }
 
+
+-keep public class * extends plugin.google.maps.MyPlugin
+-keepclassmembers public class plugin.google.maps.GoogleMaps {*; }
+-keepclassmembers public class * extends plugin.google.maps.MyPlugin { *; }
+
+
 # These options let obfuscated applications or libraries produce stack traces that can still be deciphered later on 
 -renamesourcefileattribute SourceFile    
 -keepattributes SourceFile,LineNumberTable
