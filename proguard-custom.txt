@@ -56,7 +56,13 @@
 -renamesourcefileattribute SourceFile    
 -keepattributes SourceFile,LineNumberTable
 
+
+#Selfhelp
+-keep class connect.avl.BuildConfig { *; }
+
 # Enable proguard with Cordova
+-keep class org.apache.cordova.** { *; }
+-keep class org.apache.cordova.camera.** { *; }
 -keep class org.apache.cordova.** { *; }
 -keep public class * extends org.apache.cordova.CordovaPlugin
 
