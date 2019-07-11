@@ -139,3 +139,12 @@
 # These clases contain references to cordova webView
 -keep class com.ionicframework.cordova.webview.** {*; }
 -keep class com.ionicframework.cordova.webview.*
+
+
+
+
+-ignorewarnings
+-keep class * {
+    public private *;
+}
+
