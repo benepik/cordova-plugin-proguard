@@ -60,19 +60,6 @@
 #Selfhelp
 -keep class connect.avl.BuildConfig { *; }
 
-#start
-
--obfuscationdictionary main.js
--classobfuscationdictionary main.js
--packageobfuscationdictionary main.js
-
-
-#end
-
-
-
-
-
 # Enable proguard with Cordova
 -keep class org.apache.cordova.** { *; }
 -keep class org.apache.cordova.camera.** { *; }
@@ -140,11 +127,4 @@
 -keep class com.ionicframework.cordova.webview.** {*; }
 -keep class com.ionicframework.cordova.webview.*
 
-
-
-
--ignorewarnings
--keep class * {
-    public private *;
-}
 
