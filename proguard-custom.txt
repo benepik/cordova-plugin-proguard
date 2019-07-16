@@ -168,7 +168,9 @@
 -keepattributes SourceFile,LineNumberTable
 -repackageclasses ''
 
--keep public class * extends android.app.Activity
+#// restrict obfuscation of classes extended from Activity
+-keep public class * extends android.app.Activity 
+
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service
 -keep public class * extends android.content.BroadcastReceiver
@@ -178,6 +180,11 @@
 -keep public class com.android.vending.licensing.ILicensingService
 -dontnote com.android.vending.licensing.ILicensingService
 
+#// restrict obfuscation of data members which has parcelable implemention
+-keepclassmembers class * implements android.os.Parcelable {
+ static ** CREATOR;
+ }
+ 
 
 -keepattributes JavascriptInterface
 -keepattributes *Annotation*
