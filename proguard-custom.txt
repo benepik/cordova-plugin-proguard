@@ -132,6 +132,16 @@
 
 
 #*****************************
+
+-keep class com.innoquant.** { *; }
+-keep class org.msgpack.** { *; }
+-keep class javassist.util.** { *; }
+-keep class javassist.tools.** { *; }
+-dontwarn org.msgpack.**
+-dontwarn javassist.util.**
+-dontwarn javassist.tools.**
+
+
 # By default, the flags in this file are appended to flags specified
 # in /usr/share/android-studio/data/sdk/tools/proguard/proguard-android.txt
 
