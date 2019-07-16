@@ -1,44 +1,32 @@
-# To enable ProGuard in your project, edit project.properties
-# to define the proguard.config property as described in that file.
-# Add project specific ProGuard rules here.
 # By default, the flags in this file are appended to flags specified
-# in ${sdk.dir}/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the ProGuard
-# include property in project.properties.
-#
+# in /usr/share/android-studio/data/sdk/tools/proguard/proguard-android.txt
+
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
-# Add any project specific keep options here:
-#-dontshrink
-#-dontoptimize
-#-dontobfuscate
+##---------------Begin: proguard configuration common for all Android apps ----------
+# ionic
+-keep class org.apache.cordova.** { *; }
+-keep public class * extends org.apache.cordova.CordovaPlugin
+-keep class com.ionic.keyboard.IonicKeyboard.** { *; }
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
--keepclassmembers class android.webkit.WebView {
-  public *;
+
+
+#admob
+-keep class * extends java.util.ListResourceBundle {
+    protected Object[][] getContents();
 }
-
-#-injars      bin/classes
-#-injars      libs
-#-outjars     bin/classes-processed.jar
-
-# Using Google's License Verification Library 
--keep class com.android.vending.licensing.ILicensingService
-
-# Specifies to write out some more information during processing. 
-# If the program terminates with an exception, this option will print out the entire stack trace, instead of just the exception message.
--verbose
-
-# Annotations are represented by attributes that have no direct effect on the execution of the code. 
--keepattributes *Annotation*
-
--keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
+-keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
+    public static final *** NULL;
 }
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * {
+    @com.google.android.gms.common.annotation.KeepName *;
+}
+-keepnames class * implements android.os.Parcelable {
+    public static final ** CREATOR;
+}
+-keep public class com.google.cordova.admob.**
 
 -keepattributes InnerClasses
 -keep class **.R
@@ -46,23 +34,11 @@
     <fields>;
 }
 
-
--keep public class * extends plugin.google.maps.MyPlugin
--keepclassmembers public class plugin.google.maps.GoogleMaps {*; }
--keepclassmembers public class * extends plugin.google.maps.MyPlugin { *; }
-
-
-# These options let obfuscated applications or libraries produce stack traces that can still be deciphered later on 
--renamesourcefileattribute SourceFile    
+# These options let obfuscated applications or libraries produce stack traces that can still be deciphered later on
+-renamesourcefileattribute SourceFile
 -keepattributes SourceFile,LineNumberTable
 
-
-#Selfhelp
--keep class connect.avl.BuildConfig { *; }
-
 # Enable proguard with Cordova
--keep class org.apache.cordova.** { *; }
--keep class org.apache.cordova.camera.** { *; }
 -keep class org.apache.cordova.** { *; }
 -keep public class * extends org.apache.cordova.CordovaPlugin
 
@@ -127,38 +103,461 @@
 -keep class com.ionicframework.cordova.webview.** {*; }
 -keep class com.ionicframework.cordova.webview.*
 
+-keepattributes EnclosingMethod
+-keepattributes InnerClasses
+
+-keep class org.apache.cordova.** { *; }
+-keep public class * extends org.apache.cordova.CordovaPlugin
+-keep class com.ionic.keyboard.IonicKeyboard.** { *; }
+-keepclassmembers class com.your.package.YourWebViewClass$JSInterfaceClass {
+   public *;
+}
+
+# If your project uses WebView with JS, uncomment the following
+# and specify the fully qualified class name to the JavaScript interface
+# class:
+-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+   public *;
+}
+
+### RxJava, RxAndroid (https://gist.github.com/kosiara/487868792fbd3214f9c9)
+-keep class rx.schedulers.Schedulers {
+    public static <methods>;
+}
+-keep class rx.schedulers.ImmediateScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.TestScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.Schedulers {
+    public static ** test();
+}
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    long producerNode;
+    long consumerNode;
+}
+-dontwarn sun.misc.Unsafe
+
+### LeakCanary
+-keep class org.eclipse.mat.** { *; }
+-keep class com.squareup.leakcanary.** { *; }
+
+### Stetho, Stetho Realm plugin
+-keep class com.facebook.stetho.** {
+  *;
+}
+-dontwarn com.facebook.stetho.**
+
+-keep class com.uphyca.** { *; }
+
+### Glide, Glide Okttp Module, Glide Transformations
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+# -keepresourcexmlelements manifest/application/meta-data@value=GlideModule 3 For dexguard
+
+-dontwarn jp.co.cyberagent.android.gpuimage.**
+
+### Viewpager indicator
+-dontwarn com.viewpagerindicator.**
+
+### Support v7, Design
+# http://stackoverflow.com/questions/29679177/cardview-shadow-not-appearing-in-lollipop-after-obfuscate-with-proguard/29698051
+-keep class android.support.v7.widget.RoundRectDrawable { *; }
+
+-keep public class android.support.v7.widget.** { *; }
+-keep public class android.support.v7.internal.widget.** { *; }
+-keep public class android.support.v7.internal.view.menu.** { *; }
+
+-keep public class * extends android.support.v4.view.ActionProvider {
+    public <init>(android.content.Context);
+}
+
+-dontwarn android.support.**
+-dontwarn android.support.design.**
+-keep class android.support.design.** { *; }
+-keep interface android.support.design.** { *; }
+-keep public class android.support.design.R$* { *; }
+
+# https://github.com/Gericop/Android-Support-Preference-V7-Fix/blob/master/preference-v7/proguard-rules.pro
+-keepclassmembers class android.support.v7.preference.PreferenceGroupAdapter {
+    private ** mPreferenceLayouts;
+}
+-keepclassmembers class android.support.v7.preference.PreferenceGroupAdapter$PreferenceLayout {
+    private int resId;
+    private int widgetResId;
+}
+
+# https://github.com/dandar3/android-support-animated-vector-drawable/blob/master/proguard-project.txt
+#-keepclassmembers class android.support.graphics.drawable.VectorDrawableCompat$* {
+#   void set*(***);
+#   *** get*();
+#}
+
+### Reactive Network
+-dontwarn com.github.pwittchen.reactivenetwork.library.ReactiveNetwork
+-dontwarn io.reactivex.functions.Function
+-dontwarn rx.internal.util.**
+-dontwarn sun.misc.Unsafe
+
+### Retrolambda
+# as per official recommendation: https://github.com/evant/gradle-retrolambda#proguard
+-dontwarn java.lang.invoke.*
+
+# Gson uses generic type information stored in a class file when working with fields. Proguard
+# removes such information by default, so configure it to keep all of it.
+-keepattributes Signature
+
+# For using GSON @Expose annotation
+-keepattributes *Annotation*
+
+# Gson specific classes
+-keep class sun.misc.Unsafe { *; }
+#-keep class com.google.gson.stream.** { *; }
+
+# Application classes that will be serialized/deserialized over Gson
+# -keep class com.google.gson.examples.android.model.** { *; }
+
+# Prevent proguard from stripping interface information from TypeAdapterFactory,
+# JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
 
 
-#***********************my code is starting from here********************************************************************
+### OkHttp3
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+# A resource is loaded with a relative path so the package of this class must be preserved.
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 
-# Preserve all native method names and the names of their classes.
+### Picasso
+-dontwarn com.squareup.okhttp.**
+
+### SimpleXmlConverter
+# Keep public classes and methods.
+-dontwarn com.bea.xml.stream.**
+-dontwarn org.simpleframework.xml.stream.**
+-keep class org.simpleframework.xml.**{ *; }
+-keepclassmembers,allowobfuscation class * {
+    @org.simpleframework.xml.* <fields>;
+    @org.simpleframework.xml.* <init>(...);
+}
+
+# Findbugs Annotation
+-dontwarn edu.umd.cs.findbugs.annotations.SuppressFBWarnings
+
+# Findbugs jsr305
+-dontwarn javax.annotation.**
+
+### greenDAO 3
+-keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
+public static java.lang.String TABLENAME;
+}
+-keep class **$Properties
+# If you do not use SQLCipher:
+-dontwarn org.greenrobot.greendao.database.**
+# If you do not use RxJava:
+-dontwarn rx.**
+### greenDAO 2
+-keepclassmembers class * extends de.greenrobot.dao.AbstractDao {
+public static java.lang.String TABLENAME;
+}
+-keep class **$Properties
+
+### MoPub
+-keepclassmembers class com.mopub.** { public *; }
+-keep public class com.mopub.**
+-keep public class android.webkit.JavascriptInterface {}
+
+-keep class * extends com.mopub.mobileads.CustomEventBanner {}
+-keepclassmembers class com.mopub.mobileads.CustomEventBannerAdapter {!private !public !protected *;}
+-keep class * extends com.mopub.mobileads.CustomEventInterstitial {}
+-keep class * extends com.mopub.mobileads.CustomEventNative {}
+## Android Advertiser ID
+-keep class com.google.android.gms.common.GooglePlayServicesUtil {*;}
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient {*;}
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient$Info {*;}
+
+### Fabric
+# In order to provide the most meaningful crash reports
+-keepattributes SourceFile,LineNumberTable
+# If you're using custom Eception
+-keep public class * extends java.lang.Exception
+
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
+
+### Crash report
+-renamesourcefileattribute SourceFile
+-keepattributes SourceFile,LineNumberTable
+
+### Other
+-dontwarn com.google.errorprone.annotations.*
+
+### Exoplayer2
+-dontwarn com.google.android.exoplayer2.**
+
+### Android Architecture Components
+# Ref: https://issuetracker.google.com/issues/62113696
+# LifecycleObserver's empty constructor is considered to be unused by proguard
+#-keepclassmembers class * implements android.arch.lifecycle.LifecycleObserver {
+#    <init>(...);
+#}
+-keep class * implements android.arch.lifecycle.LifecycleObserver {
+    <init>(...);
+}
+
+# ViewModel's empty constructor is considered to be unused by proguard
+-keepclassmembers class * extends android.arch.lifecycle.ViewModel {
+    <init>(...);
+}
+
+# keep Lifecycle State and Event enums values
+-keepclassmembers class android.arch.lifecycle.Lifecycle$State { *; }
+-keepclassmembers class android.arch.lifecycle.Lifecycle$Event { *; }
+# keep methods annotated with @OnLifecycleEvent even if they seem to be unused
+# (Mostly for LiveData.LifecycleBoundObserver.onStateChange(), but who knows)
+-keepclassmembers class * {
+    @android.arch.lifecycle.OnLifecycleEvent *;
+}
+
+### Carbon
 -keepclasseswithmembernames class * {
     native <methods>;
 }
+-keep class android.support.v8.renderscript.** { *; }
+-dontwarn carbon.BR
+-dontwarn carbon.internal**
+-dontwarn carbon.databinding**
+-dontwarn java.lang.invoke**
+## Databinding or library depends on databinding
+-dontwarn android.databinding.**
+-keep class android.databinding.** { *; }
 
--keepclasseswithmembernames class * {
-    public <init>(android.content.Context, android.util.AttributeSet);
+
+# https://github.com/Kotlin/kotlinx.atomicfu/issues/57
+-dontwarn kotlinx.atomicfu.**
+
+### Kotlin
+#https://stackoverflow.com/questions/33547643/how-to-use-kotlin-with-proguard
+#https://medium.com/@AthorNZ/kotlin-metadata-jackson-and-proguard-f64f51e5ed32
+-keepclassmembers class **$WhenMappings {
+    <fields>;
+}
+-keep class kotlin.Metadata { *; }
+-keepclassmembers class kotlin.Metadata {
+    public <methods>;
 }
 
--keepclasseswithmembernames class * {
-    public <init>(android.content.Context, android.util.AttributeSet, int);
+### Google Play Billing
+-keep class com.android.vending.billing.**
+
+### Adjust SDK, android.installreferrer
+-keep public class com.adjust.sdk.** { *; }
+-keep class com.google.android.gms.common.ConnectionResult {
+    int SUCCESS;
 }
-# Preserve static fields of inner classes of R classes that might be accessed
-# through introspection.
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient {
+    com.google.android.gms.ads.identifier.AdvertisingIdClient$Info getAdvertisingIdInfo(android.content.Context);
+}
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient$Info {
+    java.lang.String getId();
+    boolean isLimitAdTrackingEnabled();
+}
+-keep public class com.android.installreferrer.** { *; }
+
+
+### Nothing for Butterknife 8, Realm, RxJava2, RxBinding, RxRelay, Dagger2, OneSignal, Google Play Services, Firebase, Facebook SDK, Room DB,
+
+# This is a configuration file for ProGuard. 
+
+-dontusemixedcaseclassnames 
+-dontskipnonpubliclibraryclasses 
+-verbose
+# Optimization is turned off by default. Dex does not like code run # through the ProGuard optimize and preverify steps (and performs #some of these optimizations on its own).
+-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/* 
+-optimizations !method/inlining/* 
+-optimizationpasses 5 
+-allowaccessmodification 
+-assumenosideeffects
+class android.util.Log {
+public static *** d(...); 
+public static *** i(...);
+public static *** v(...);
+}
+# Note that you cannot just include these flags in your own
+# configuration file; if you are including this file, optimization
+# will be turned off. You'll need to either edit this file, or
+# duplicate the contents of this file and remove the include of this
+# file from your project's proguard.config path property.
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.app.backup.BackupAgent
+-keep public class * extends android.preference.Preference
+-keep public class * extends android.support.v4.app.Fragment
+-keep public class * extends android.support.v4.app.DialogFragment
+-keep public class * extends com.actionbarsherlock.app.SherlockListFragment
+-keep public class * extends com.actionbarsherlock.app.SherlockFragment
+-keep public class * extends
+com.actionbarsherlock.app.SherlockFragmentActivity
+-keep public class * extends android.app.Fragment
+-keep public class com.android.vending.licensing.ILicensingService
+
+#native
+-keepclasseswithmembernames class * {
+native<methods>;
+}
+-keep public class * extends android.view.View {
+public <init>(android.content.Context); 
+public <init>(android.content.Context, android.util.AttributeSet); public <init>(android.content.Context, android.util.AttributeSet, int); 
+public void set*(...); 
+}
+-keepclasseswithmembers class * { 
+public <init>(android.content.Context, android.util.AttributeSet);
+}
+-keepclasseswithmembers class * {
+public <init>(android.content.Context, android.util.AttributeSet,
+int);
+}
+-keepclassmembers class * extends android.app.Activity {
+public void *(android.view.View);
+}
+#For enumeration classes, see
+-keepclassmembers enum * { 
+public static **[] values();
+public static ** valueOf(java.lang.String);
+}
+-keep class * implements android.os.Parcelable {
+public static final android.os.Parcelable$Creator *;
+}
 -keepclassmembers class **.R$* {
-  public static <fields>;
+public static <fields>;
+}
+-keep class android.support.v4.app.** {*;}
+-keep interface android.support.v4.app.** {*;}
+-keep
+class com.actionbarsherlock.** {*;}
+-keep
+interface com.actionbarsherlock.** {*;}
+#The support library contains references to newer platform versions.
+#Don't warn about those in case this app is linking against an older
+#platform version. We know about them, and they are safe.
+-dontwarn android.support.**
+-dontwarn com.google.ads.**
+-keepclassmembers class * {
+@android.webkit.JavascriptInterface<methods>;
+}
+-keepattributes JavascriptInterface
+-keepattributes *Annotation*
+-dontwarn com.razorpay.**
+-keep class com.razorpay.** {*;}
+-keepclasseswithmembers class * { 
+public void onPayment*(...); 
 }
 
-# Preserve the special static methods that are required in all enumeration classes.
+-keepclassmembers class com.your.package.YourJSInterfaceClass {
+   public *;
+}
+
+# Using Google's License Verification Library 
+-keep class com.android.vending.licensing.ILicensingService
+
+# Specifies to write out some more information during processing. 
+# If the program terminates with an exception, this option will print out the entire stack trace, instead of just the exception message.
+-verbose
+
+# Annotations are represented by attributes that have no direct effect on the execution of the code. 
+-keepattributes *Annotation*
+
 -keepclassmembers enum * {
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
 
--keep public class * {
-    public protected *;
+-keepattributes InnerClasses
+-keep class **.R
+-keep class **.R$* {
+    <fields>;
 }
 
--keep class * implements android.os.Parcelable {
-  public static final android.os.Parcelable$Creator *;
+# These options let obfuscated applications or libraries produce stack traces that can still be deciphered later on 
+-renamesourcefileattribute SourceFile    
+-keepattributes SourceFile,LineNumberTable
+
+# Enable proguard with Cordova
+-keep class org.apache.cordova.** { *; }
+-keep public class * extends org.apache.cordova.CordovaPlugin
+
+-keep class com.google.android.gms.dynamite.DynamiteModule$DynamiteLoaderClassLoader { java.lang.ClassLoader sClassLoader; }
+-keep class com.google.android.gms.dynamite.descriptors.com.google.android.gms.flags.ModuleDescriptor { int MODULE_VERSION; }
+-keep class com.google.android.gms.dynamite.descriptors.com.google.android.gms.flags.ModuleDescriptor { java.lang.String MODULE_ID; }
+
+-keep class org.apache.cordova.CordovaBridge { org.apache.cordova.PluginManager pluginManager; }
+-keep class org.apache.cordova.CordovaInterfaceImpl { org.apache.cordova.PluginManager pluginManager; }
+-keep class org.apache.cordova.CordovaResourceApi { org.apache.cordova.PluginManager pluginManager; }
+-keep class org.apache.cordova.CordovaWebViewImpl { org.apache.cordova.PluginManager pluginManager; }
+-keep class org.apache.cordova.ResumeCallback { org.apache.cordova.PluginManager pluginManager; }
+-keep class org.apache.cordova.engine.SystemWebViewEngine { org.apache.cordova.PluginManager pluginManager; }
+
+-keep class com.google.gson.internal.UnsafeAllocator { ** theUnsafe; }
+-keep class me.leolin.shortcutbadger.ShortcutBadger { ** extraNotification; }
+-keep class me.leolin.shortcutbadger.impl.XiaomiHomeBadger { ** messageCount; }
+-keep class me.leolin.shortcutbadger.impl.XiaomiHomeBadger { ** extraNotification; }
+
+-dontnote org.apache.harmony.xnet.provider.jsse.NativeCrypto
+-dontnote sun.misc.Unsafe
+
+-keep class com.worklight.androidgap.push.** { *; }
+-keep class com.worklight.wlclient.push.** { *; }
+
+# Enable proguard with Google libs
+-keep class com.google.** { *; }
+-dontwarn com.google.common.**
+-dontwarn com.google.ads.**
+
+# apache.http
+-optimizations !class/merging/vertical*,!class/merging/horizontal*,!code/simplification/arithmetic,!field/*,!code/allocation/variable
+
+-keep class net.sqlcipher.** { *; }
+-dontwarn net.sqlcipher.**
+
+-keep class org.codehaus.** { *; }
+-keepattributes *Annotation*,EnclosingMethod
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
 }
+
+# Remove debug logs in release build
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+}
+
+# These classes contain references to external jars which are not included in the default MobileFirst project.
+-dontwarn com.worklight.common.internal.WLTrusteerInternal*
+-dontwarn com.worklight.jsonstore.**
+-dontwarn org.codehaus.jackson.map.ext.*
+-dontwarn com.worklight.androidgap.push.GCMIntentService
+-dontwarn com.worklight.androidgap.plugin.WLInitializationPlugin
+
+-dontwarn android.support.v4.**
+-dontwarn android.net.SSLCertificateSocketFactory
+-dontwarn android.net.http.*
+
+# These clases contain references to cordova webView
+-keep class com.ionicframework.cordova.webview.** {*; }
+-keep class com.ionicframework.cordova.webview.*
