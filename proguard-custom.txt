@@ -57,8 +57,6 @@
 -keepattributes SourceFile,LineNumberTable
 
 
-#Selfhelp
--keep class connect.avl.BuildConfig { *; }
 
 # Enable proguard with Cordova
 -keep class org.apache.cordova.** { *; }
@@ -82,6 +80,39 @@
 -keep class me.leolin.shortcutbadger.impl.XiaomiHomeBadger { ** messageCount; }
 -keep class me.leolin.shortcutbadger.impl.XiaomiHomeBadger { ** extraNotification; }
 
+
+//***rajesh***
+
+-keep class com.worklight.androidgap.push.** { *; }
+-keep class com.worklight.wlclient.push.** { *; }
+-keep class com.worklight.common.security.AppAuthenticityToken { *; }
+
+-keep class rx.schedulers.Schedulers {
+    public static <methods>;
+}
+-keep class rx.schedulers.ImmediateScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.TestScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.Schedulers {
+    public static ** test();
+}
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    long producerNode;
+    long consumerNode;
+}
+-dontwarn sun.misc.Unsafe
+
+
+
+
+
 -dontnote org.apache.harmony.xnet.provider.jsse.NativeCrypto
 -dontnote sun.misc.Unsafe
 
@@ -92,6 +123,12 @@
 -keep class com.google.** { *; }
 -dontwarn com.google.common.**
 -dontwarn com.google.ads.**
+
+
+
+#Selfhelp
+-keep class connect.avl.BuildConfig { *; }
+
 
 # apache.http
 -optimizations !class/merging/vertical*,!class/merging/horizontal*,!code/simplification/arithmetic,!field/*,!code/allocation/variable
