@@ -131,7 +131,7 @@
 -keep class com.ionicframework.cordova.webview.*
 
 
-#*****************************
+#************************************************************************************
 
 -keep class com.innoquant.** { *; }
 -keep class org.msgpack.** { *; }
@@ -178,6 +178,14 @@
 -keep public class com.android.vending.licensing.ILicensingService
 -dontnote com.android.vending.licensing.ILicensingService
 
+
+-keepattributes JavascriptInterface
+-keepattributes *Annotation*
+-dontwarn com.razorpay.**
+-keep class com.razorpay.** {*;}
+-keepclasseswithmembers class * { 
+public void onPayment*(...); 
+}
 
 
 # Explicitly preserve all serialization members. The Serializable interface
