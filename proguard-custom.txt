@@ -83,32 +83,6 @@
 
 //***rajesh***
 
--keep class com.worklight.androidgap.push.** { *; }
--keep class com.worklight.wlclient.push.** { *; }
--keep class com.worklight.common.security.AppAuthenticityToken { *; }
-
--keep class rx.schedulers.Schedulers {
-    public static <methods>;
-}
--keep class rx.schedulers.ImmediateScheduler {
-    public <methods>;
-}
--keep class rx.schedulers.TestScheduler {
-    public <methods>;
-}
--keep class rx.schedulers.Schedulers {
-    public static ** test();
-}
--keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
-    long producerIndex;
-    long consumerIndex;
-}
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
-    long producerNode;
-    long consumerNode;
-}
--dontwarn sun.misc.Unsafe
-
 
 
 
@@ -135,6 +109,10 @@
 
 -keep class net.sqlcipher.** { *; }
 -dontwarn net.sqlcipher.**
+
+-keep class org.apache.cordova.** { *; }
+-dontwarn org.apache.cordova.**
+
 
 -keep class org.codehaus.** { *; }
 -keepattributes *Annotation*,EnclosingMethod
